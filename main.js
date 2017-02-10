@@ -217,6 +217,7 @@ ASSET_MANAGER.downloadAll(function () {
     var ryu = new Ryu(gameEngine);
     // var bg = new Background(gameEngine, ASSET_MANAGER.getAsset("./img/Seattle.jpg"));
 
+    ///////////
 
     gameEngine.addEntity(bg);
     // gameEngine.addEntity(unicorn);
