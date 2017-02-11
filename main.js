@@ -1,3 +1,9 @@
+// This code is used of TCSS 491 Comp World Assignment 1
+// Credits:
+// Running girl sprite sheet is from https://www.codeandweb.com/texturepacker/tutorials/how-to-create-a-sprite-sheet
+
+
+// Animation and it's drawFrame and update prototype is from sample code.
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse) {
     this.spriteSheet = spriteSheet;
     this.startX = startX;
@@ -52,123 +58,48 @@ Animation.prototype.isDone = function () {
     return (this.elapsedTime >= this.totalTime);
 }
 
+// Background object
 function Background(game) {
-    Entity.call(this, game, 0, 400);
-    this.radius = 200;
-}
+    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Seattle.jpg"), 0, 0, 1680, 1111, 1, 1, true, true);
+    Entity.call(this, game, 0, 0);
+};
 
 Background.prototype = new Entity();
 Background.prototype.constructor = Background;
 
-Background.prototype.update = function () {
-}
-
 Background.prototype.draw = function (ctx) {
-    // ctx.fillStyle = "SaddleBrown";
-    ctx.fillStyle = "Red"
-    // startX, startY, length, height
-    ctx.fillRect(0,550,800,250);
-    Entity.prototype.draw.call(this);
-}
+    this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
+};
 
-// function Unicorn(game) {
-//     //function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse)
-//     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 0, 0, 206, 110, 0.02, 30, true, true);
-    
-//     this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 618, 334, 174, 138, 0.03, 40, false, true);
-    
-//     this.dashAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 0, 900, 474, 194, 0.04, 16, false, false);
-    
-//     // this.walkAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 0, 0, 206, 110, 0.02, 30, true, true);
+Background.prototype.update = function () {
+};
 
-//     this.jumping = false;
-//     this.dashing = false;
-//     this.radius = 100;
-//     this.ground = 400;
-//     Entity.call(this, game, 0, 400);
-// }
-
-// Unicorn.prototype = new Entity();
-// Unicorn.prototype.constructor = Unicorn;
-
-// Unicorn.prototype.update = function () {
-//     if (this.game.space) this.jumping = true;
-
-//     if (this.game.dashKey) this.dashing = true;
-
-//     if (this.jumping) {
-//         if (this.jumpAnimation.isDone()) {
-//             this.jumpAnimation.elapsedTime = 0;
-//             this.jumping = false;
-//         }
-//         var jumpDistance = this.jumpAnimation.elapsedTime / this.jumpAnimation.totalTime;
-//         var totalHeight = 200;
-
-//         if (jumpDistance > 0.5)
-//             jumpDistance = 1 - jumpDistance;
-
-//         // var height = jumpDistance * 2 * totalHeight;
-//         var height = totalHeight*(-4 * (jumpDistance * jumpDistance - jumpDistance));
-//         this.y = this.ground - height;
-//     }
-
-//     if (this.dashing) {
-//         if (this.dashAnimation.isDone()) {
-//             this.dashAnimation.elapsedTime = 0;
-//             this.dashing = false;
-//         }
-//         // var dashDistance = this.dashAnimation.elapsedTime / this.dashAnimation.totalTime;
-//     }
-
-//     Entity.prototype.update.call(this);
-// }
-
-// Unicorn.prototype.draw = function (ctx) {
-//     if (this.jumping) {
-//         this.jumpAnimation.drawFrame(this.game.clockTick, ctx, this.x + 17, this.y - 34, 1);
-//     }
-//     else if (this.dashing) {
-//         this.dashAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y - 100, 1);
-//         this.x += 1
-//     }
-//     else {
-//         this.animation.drawFrame(this.game.clockTick, ctx, this.x += 5, this.y, 1);
-
-//         if (this.x > 800) this.x = -50;
-//     }
-//     Entity.prototype.draw.call(this);
-// }
-
-////////////////////////////////////////////////////////////
-function Ryu(game) {
-    //function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse)
-    // this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Ryu.png"), 0, 123, 73, 100, 0.1, 5, true, false);
+// Running girl object
+function RunningGirl(game) {
     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/runningGirl.png"), 0, 0, 250, 253, 0.1, 6, true, false);
-
     this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/runningGirl.png"), 618, 334, 174, 138, 0.03, 40, false, true);
-
-
     this.jump = false;
-    // this.dashing = false;
-    // this.radius = 100;
     this.ground = 400;
     Entity.call(this, game, 0, this.ground);
 }
 
-Ryu.prototype = new Entity();
-Ryu.prototype.constructor = Ryu;
+RunningGirl.prototype = new Entity();
+RunningGirl.prototype.constructor = RunningGirl;
 
-Ryu.prototype.update = function () {
-    console.log("x: " + this.x);
-
-    // if (this.x > 200 && this.x <= 300) this.jump = true;
-    // if (this.x > 550) this.jump = false;
-    this.jump = this.x > 200 && this.x <= 420 ? true : false;
+RunningGirl.prototype.update = function () {
+ 
+    // Jump over Space Needle
+    this.jump = this.x > 400 && this.x <= 619 ? true : false;
 
     if (this.jump) {
+
         if (this.jumpAnimation.isDone()) {
+
+            console.log("land at x: " + this.x);
+
             this.jumpAnimation.elapsedTime = 0;
             this.jump = false;
+            this.y = this.ground;
         }
         var jumpDistance = this.jumpAnimation.elapsedTime / this.jumpAnimation.totalTime;
         var totalHeight = 200;
@@ -179,50 +110,39 @@ Ryu.prototype.update = function () {
         var height = totalHeight*(-4 * (jumpDistance * jumpDistance - jumpDistance));
         this.y = this.ground - height;
     }
+    else {
+        this.y = this.ground;
+    }
 }
 
-Ryu.prototype.draw = function (ctx) {
+// Draw the running girl on canvas
+RunningGirl.prototype.draw = function (ctx) {
     if (this.jump) {
-        this.jumpAnimation.drawFrame(this.game.clockTick, ctx, this.x + 17, this.y - 34, 1);
+        this.jumpAnimation.drawFrame(this.game.clockTick, ctx, this.x + 15, this.y - 30, 1);
     }
     this.animation.drawFrame(this.game.clockTick, ctx, this.x += 3, this.y, 0.5);
-
-    if (this.x > 800) this.x = -50;
-    // }
+    // back to the beginning
+    if (this.x > 800) {
+        this.x = 0;
+    }
     Entity.prototype.draw.call(this);
 }
-
-
-
-
-
-////////////////////////////////////////////////////////////
-
 
 // the "main" code begins here
 
 var ASSET_MANAGER = new AssetManager();
-
-// ASSET_MANAGER.queueDownload("./img/RobotUnicorn.png");
 ASSET_MANAGER.queueDownload("./img/runningGirl.png");
-// ASSET_MANAGER.queueDownload("./img/Seattle.jpg");
+ASSET_MANAGER.queueDownload("./img/Seattle.jpg");
 
 ASSET_MANAGER.downloadAll(function () {
     var canvas = document.getElementById('gameWorld');
     var ctx = canvas.getContext('2d');
-
     var gameEngine = new GameEngine();
-    var bg = new Background(gameEngine);
-    // var unicorn = new Unicorn(gameEngine);
-    var ryu = new Ryu(gameEngine);
-    // var bg = new Background(gameEngine, ASSET_MANAGER.getAsset("./img/Seattle.jpg"));
 
-    ///////////
+    // Add background then the running girl
+    gameEngine.addEntity(new Background(gameEngine));
+    gameEngine.addEntity(new RunningGirl(gameEngine));
 
-    gameEngine.addEntity(bg);
-    // gameEngine.addEntity(unicorn);
-    gameEngine.addEntity(ryu);
- 
     gameEngine.init(ctx);
     gameEngine.start();
 });
