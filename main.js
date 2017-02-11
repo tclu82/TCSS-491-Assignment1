@@ -139,7 +139,7 @@ ASSET_MANAGER.downloadAll(function () {
     var ctx = canvas.getContext('2d');
     var gameEngine = new GameEngine();
 
-    // Add background then the running girl
+    // Add background then the running girl.
     gameEngine.addEntity(new Background(gameEngine));
     gameEngine.addEntity(new RunningGirl(gameEngine));
 
